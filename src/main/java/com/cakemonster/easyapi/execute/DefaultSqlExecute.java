@@ -2,10 +2,18 @@ package com.cakemonster.easyapi.execute;
 
 import com.alibaba.fastjson.JSON;
 import com.cakemonster.easyapi.parse.MybatisSqlParser;
+import com.github.pagehelper.parser.SqlParserUtil;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.select.PlainSelect;
+import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.select.SelectItem;
+import net.sf.jsqlparser.statement.select.SelectItemVisitorAdapter;
 import org.apache.ibatis.binding.BindingException;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
+import org.apache.ibatis.mapping.ParameterMode;
 import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
@@ -70,30 +78,57 @@ public class DefaultSqlExecute {
         });
     }
 
-    private Map<String, String> parseAliases(String sql) {
-        Map<String, String> aliasMap = new HashMap<>();
-        // 只考虑 SELECT 子句部分
-        String selectClause = sql.split("(?i)from")[0];
-        // 正则表达式匹配列名和别名
-        Pattern pattern = Pattern.compile("(?i)([^,\\s]+)(\\s+AS\\s+([\\w]+))?");
-        Matcher matcher = pattern.matcher(selectClause);
-        while (matcher.find()) {
-            String columnName = matcher.group(1).trim();
-            String alias = matcher.group(3) != null ? matcher.group(3).trim() : columnName;
-            aliasMap.put(columnName, alias);
+    private List<String> parseAliases(String sql) {
+        Statement stmt = null;
+        try {
+            stmt = SqlParserUtil.parse(sql);
+        } catch (Throwable e) {
+
         }
-        return aliasMap;
+        Select selectStatement = (Select)stmt;
+        PlainSelect plainSelect = (PlainSelect)selectStatement.getSelectBody();
+        List<String> aliases = new ArrayList<>();
+        for (SelectItem selectItem : plainSelect.getSelectItems()) {
+            selectItem.accept(new SelectItemVisitorAdapter() {
+                @Override
+                public void visit(SelectItem item) {
+                    if (item.getAlias() != null) {
+                        aliases.add(item.getAlias().getName());
+                    }
+                }
+            });
+        }
+        return aliases;
     }
+
+    //    private Map<String, String> parseAliases(String sql) {
+    //        Map<String, String> aliasMap = new HashMap<>();
+    //        // 只考虑 SELECT 子句部分
+    //        String selectClause = sql.split("(?i)from")[0];
+    //        // 正则表达式匹配列名和别名
+    //        Pattern pattern = Pattern.compile("(?i)([^,\\s]+)(\\s+AS\\s+([\\w]+))?");
+    //        Matcher matcher = pattern.matcher(selectClause);
+    //        while (matcher.find()) {
+    //            String columnName = matcher.group(1).trim();
+    //            String alias = matcher.group(3) != null ? matcher.group(3).trim() : columnName;
+    //            aliasMap.put(columnName, alias);
+    //        }
+    //        return aliasMap;
+    //    }
 
     private List<Object> extractParameters(BoundSql boundSql, Map<String, Object> conditions) {
         List<Object> parameters = new ArrayList<>();
         List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
         MetaObject metaObject = CONFIGURATION.newMetaObject(boundSql.getParameterObject());
 
+        List<String> paramNames = new ArrayList<>();
         if (parameterMappings != null) {
 
             for (ParameterMapping parameterMapping : parameterMappings) {
                 String propertyName = parameterMapping.getProperty();
+                if (parameterMapping.getMode() == ParameterMode.IN) {
+                    paramNames.add(propertyName);
+                }
                 Object value;
 
                 try {
@@ -129,6 +164,7 @@ public class DefaultSqlExecute {
             }
         }
 
+        log.info("params: {}", JSON.toJSONString(paramNames));
         return parameters;
     }
 }

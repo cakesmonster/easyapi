@@ -84,11 +84,11 @@
             <artifactId>handlebars</artifactId>
             <version>4.1.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.jsqlparser/jsqlparser -->
+
         <dependency>
-            <groupId>com.github.jsqlparser</groupId>
-            <artifactId>jsqlparser</artifactId>
-            <version>4.6</version>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>6.1.0</version>
         </dependency>
 
     </dependencies>

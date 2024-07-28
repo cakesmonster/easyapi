@@ -27,7 +27,7 @@ class EasyApiApplicationTests {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/admin?useSSL=false&serverTimezone=UTC");
         dataSource.setUsername("root");
-        dataSource.setPassword("xxxxx");
+        dataSource.setPassword("Zm979603.");
 
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
@@ -74,5 +74,36 @@ class EasyApiApplicationTests {
 
         Assertions.assertEquals("[{\"department_id\":103,\"average_salary\":62000.0},{\"department_id\":102,\"average_salary\":60000.0},{\"department_id\":101,\"average_salary\":52500.0}]", JSON.toJSONString(result));
     }
+
+
+    @Test
+    public void test2() {
+        String xml =
+            "        SELECT first_name AS firstName, last_name AS lastName, salary, department_id as departmentId\n"
+                + "        FROM employees\n" + "        WHERE first_name = #{firstName} \n"
+                + "          AND last_name = #{lastName}\n" + "          AND salary >= #{minSalary}\n"
+                + "          AND department_id IN\n"
+                + "          <foreach item=\"item\" index=\"index\" collection=\"list\" open=\"(\" separator=\",\" close=\")\">\n"
+                + "              #{item}\n" + "          </foreach>\n "
+                + "limit ${page}, ${pageSize}";
+        Map<String, Object> conditions = new HashMap<>();
+        conditions.put("firstName", "John");
+        conditions.put("lastName", "Doe");
+        conditions.put("minSalary", 50000.0);
+
+        List<Long> list = new ArrayList<>();
+        list.add(101L);
+        list.add(102L);
+        list.add(103L);
+        conditions.put("list", list);
+        conditions.put("page", 1);
+        conditions.put("pageSize", 10);
+
+        DefaultSqlExecute execute = new DefaultSqlExecute(jdbcTemplate);
+        List<Map<String, Object>> result = execute.executeSql(xml, conditions);
+
+    }
+
+
 
 }

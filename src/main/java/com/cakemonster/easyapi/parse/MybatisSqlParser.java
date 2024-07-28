@@ -6,6 +6,8 @@ import org.apache.ibatis.parsing.XPathParser;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.session.Configuration;
 
+import java.util.Map;
+
 /**
  * SqlParser
  *
@@ -25,8 +27,7 @@ public class MybatisSqlParser {
         XPathParser parser = new XPathParser(xml);
         XNode node = parser.evalNode("select");
 
-        LanguageDriver langDriver = CONFIGURATION.getLanguageDriver(null);
-        // TODO(hzq) parameterType是null会有问题么？
-        return langDriver.createSqlSource(CONFIGURATION, node, null);
+        LanguageDriver langDriver = CONFIGURATION.getDefaultScriptingLanguageInstance();
+        return langDriver.createSqlSource(CONFIGURATION, node, Map.class);
     }
 }
