@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cakemonster.easyapi.dao.ApiCallRecordMapper">
+
+    <resultMap type="com.cakemonster.easyapi.model.entity.ApiCallRecordDO" id="ApiCallRecordMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="apiInfoId" column="api_info_id" jdbcType="INTEGER"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="requestHeader" column="request_header" jdbcType="VARCHAR"/>
+        <result property="requestBody" column="request_body" jdbcType="VARCHAR"/>
+        <result property="responseBody" column="response_body" jdbcType="VARCHAR"/>
+        <result property="version" column="version" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="costTime" column="cost_time" jdbcType="INTEGER"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="modifier" column="modifier" jdbcType="VARCHAR"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+        <result property="gmtModify" column="gmt_modify" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into api_call_record
+        (api_info_id,url,request_header,request_body,response_body,version,status,cost_time,creator,modifier,gmt_create,gmt_modify)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.apiInfoId}#{entity.url}#{entity.requestHeader}#{entity.requestBody}#{entity.responseBody}#{entity.version}#{entity.status}#{entity.costTime}#{entity.creator}#{entity.modifier}#{entity.gmtCreate}#{entity.gmtModify})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into api_call_record
+        (api_info_id,url,request_header,request_body,response_body,version,status,cost_time,creator,modifier,gmt_create,gmt_modify)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.apiInfoId}#{entity.url}#{entity.requestHeader}#{entity.requestBody}#{entity.responseBody}#{entity.version}#{entity.status}#{entity.costTime}#{entity.creator}#{entity.modifier}#{entity.gmtCreate}#{entity.gmtModify})
+        </foreach>
+        on duplicate key update
+        api_info_id = values(api_info_id) url = values(url) request_header = values(request_header) request_body =
+        values(request_body) response_body = values(response_body) version = values(version) status = values(status)
+        cost_time = values(cost_time) creator = values(creator) modifier = values(modifier) gmt_create =
+        values(gmt_create) gmt_modify = values(gmt_modify)
+    </insert>
+
+</mapper>
+

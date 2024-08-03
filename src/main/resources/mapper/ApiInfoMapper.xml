@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cakemonster.easyapi.dao.ApiInfoMapper">
+
+    <resultMap type="com.cakemonster.easyapi.model.entity.ApiInfoDO" id="ApiInfoMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="apiName" column="api_name" jdbcType="VARCHAR"/>
+        <result property="apiPath" column="api_path" jdbcType="VARCHAR"/>
+        <result property="apiMethod" column="api_method" jdbcType="VARCHAR"/>
+        <result property="apiProtocol" column="api_protocol" jdbcType="VARCHAR"/>
+        <result property="env" column="env" jdbcType="VARCHAR"/>
+        <result property="dsl" column="dsl" jdbcType="VARCHAR"/>
+        <result property="apiReq" column="api_req" jdbcType="VARCHAR"/>
+        <result property="apiResp" column="api_resp" jdbcType="VARCHAR"/>
+        <result property="datasetId" column="dataset_id" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="apiOwner" column="api_owner" jdbcType="VARCHAR"/>
+        <result property="apiCoordinators" column="api_coordinators" jdbcType="VARCHAR"/>
+        <result property="apiDesc" column="api_desc" jdbcType="VARCHAR"/>
+        <result property="qps" column="qps" jdbcType="INTEGER"/>
+        <result property="timeOut" column="time_out" jdbcType="INTEGER"/>
+        <result property="cacheTime" column="cache_time" jdbcType="INTEGER"/>
+        <result property="cacheUnit" column="cache_unit" jdbcType="VARCHAR"/>
+        <result property="fullPath" column="full_path" jdbcType="VARCHAR"/>
+        <result property="directoryId" column="directory_id" jdbcType="INTEGER"/>
+        <result property="appName" column="app_name" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="modifier" column="modifier" jdbcType="VARCHAR"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+        <result property="gmtModify" column="gmt_modify" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into api_info (api_name,api_path,api_method,api_protocol,env,dsl,api_req,api_resp,dataset_id,status,api_owner,api_coordinators,api_desc,qps,time_out,cache_time,cache_unit,full_path,directory_id,app_name,creator,modifier,gmt_create,gmt_modify)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.apiName}#{entity.apiPath}#{entity.apiMethod}#{entity.apiProtocol}#{entity.env}#{entity.dsl}#{entity.apiReq}#{entity.apiResp}#{entity.datasetId}#{entity.status}#{entity.apiOwner}#{entity.apiCoordinators}#{entity.apiDesc}#{entity.qps}#{entity.timeOut}#{entity.cacheTime}#{entity.cacheUnit}#{entity.fullPath}#{entity.directoryId}#{entity.appName}#{entity.creator}#{entity.modifier}#{entity.gmtCreate}#{entity.gmtModify})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into api_info (api_name,api_path,api_method,api_protocol,env,dsl,api_req,api_resp,dataset_id,status,api_owner,api_coordinators,api_desc,qps,time_out,cache_time,cache_unit,full_path,directory_id,app_name,creator,modifier,gmt_create,gmt_modify)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.apiName}#{entity.apiPath}#{entity.apiMethod}#{entity.apiProtocol}#{entity.env}#{entity.dsl}#{entity.apiReq}#{entity.apiResp}#{entity.datasetId}#{entity.status}#{entity.apiOwner}#{entity.apiCoordinators}#{entity.apiDesc}#{entity.qps}#{entity.timeOut}#{entity.cacheTime}#{entity.cacheUnit}#{entity.fullPath}#{entity.directoryId}#{entity.appName}#{entity.creator}#{entity.modifier}#{entity.gmtCreate}#{entity.gmtModify})
+        </foreach>
+        on duplicate key update
+api_name = values(api_name) api_path = values(api_path) api_method = values(api_method) api_protocol = values(api_protocol) env = values(env) dsl = values(dsl) api_req = values(api_req) api_resp = values(api_resp) dataset_id = values(dataset_id) status = values(status) api_owner = values(api_owner) api_coordinators = values(api_coordinators) api_desc = values(api_desc) qps = values(qps) time_out = values(time_out) cache_time = values(cache_time) cache_unit = values(cache_unit) full_path = values(full_path) directory_id = values(directory_id) app_name = values(app_name) creator = values(creator) modifier = values(modifier) gmt_create = values(gmt_create) gmt_modify = values(gmt_modify)     </insert>
+
+</mapper>
+
