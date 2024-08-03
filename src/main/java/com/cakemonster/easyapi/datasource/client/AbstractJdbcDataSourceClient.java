@@ -72,12 +72,12 @@ public abstract class AbstractJdbcDataSourceClient implements DataSourceClient {
     }
 
     private HikariDataSource createDataSourcePool(BaseConnectionParam baseConnectionParam, DbType dbType) {
-
         HikariDataSource dataSource = new HikariDataSource();
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        loaderJdbcDriver(classLoader, baseConnectionParam, dbType);
-
-        dataSource.setDriverClassName(baseConnectionParam.getDriverClassName());
+        //        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        //        loaderJdbcDriver(classLoader, baseConnectionParam, dbType);
+        String drv = StringUtils.isBlank(baseConnectionParam.getDriverClassName()) ? dbType.getDriverClass() :
+            baseConnectionParam.getDriverClassName();
+        dataSource.setDriverClassName(drv);
         dataSource.setJdbcUrl(baseConnectionParam.getJdbcUrl());
         dataSource.setUsername(baseConnectionParam.getUser());
         dataSource.setPassword(baseConnectionParam.getPassword());
