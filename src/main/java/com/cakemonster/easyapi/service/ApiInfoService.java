@@ -22,6 +22,6 @@ public interface ApiInfoService extends IService<ApiInfoDO> {
 
     List<ApiInfoDTO> getApiInfoList(String appName, String directoryId);
 
-    ApiInfoDTO getApiInfoDetail(String appName, String apiInfoId);
+    ApiInfoDTO getApiInfoDetail(Long apiInfoId);
 }
 

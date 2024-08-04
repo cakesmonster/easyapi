@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cakemonster.easyapi.dao.DatasourceMapper">
+
+    <resultMap type="com.cakemonster.easyapi.model.dto.DataSourceDO" id="DatasourceMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="desc" column="desc" jdbcType="VARCHAR"/>
+        <result property="dbType" column="db_type" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="connectionParams" column="connection_params" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="modifier" column="modifier" jdbcType="VARCHAR"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+        <result property="gmtModify" column="gmt_modify" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into datasource (name,desc,db_type,user_id,connection_params,creator,modifier,gmt_create,gmt_modify)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.name}#{entity.desc}#{entity.dbType}#{entity.userId}#{entity.connectionParams}#{entity.creator}#{entity.modifier}#{entity.gmtCreate}#{entity.gmtModify})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into datasource (name,desc,db_type,user_id,connection_params,creator,modifier,gmt_create,gmt_modify)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}#{entity.desc}#{entity.dbType}#{entity.userId}#{entity.connectionParams}#{entity.creator}#{entity.modifier}#{entity.gmtCreate}#{entity.gmtModify})
+        </foreach>
+        on duplicate key update
+name = values(name) desc = values(desc) db_type = values(db_type) user_id = values(user_id) connection_params = values(connection_params) creator = values(creator) modifier = values(modifier) gmt_create = values(gmt_create) gmt_modify = values(gmt_modify)     </insert>
+
+</mapper>
+

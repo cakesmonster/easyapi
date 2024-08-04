@@ -23,4 +23,12 @@ public enum DbType {
 
     private final String driverClass;
 
+    public static DbType of(Integer code) {
+        for (DbType dbType : DbType.values()) {
+            if (dbType.getCode().equals(code)) {
+                return dbType;
+            }
+        }
+        return null;
+    }
 }

@@ -3,7 +3,6 @@ package com.cakemonster.easyapi.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cakemonster.easyapi.common.Result;
-import com.cakemonster.easyapi.model.entity.ApiInfoDO;
 import com.cakemonster.easyapi.service.ApiInfoService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -28,4 +28,14 @@ public class ApiResponseDTO {
      * 描述
      */
     private String desc;
+
+    /**
+     * 是否需要计算环比
+     */
+    private Boolean needCycleCrc;
+
+    /**
+     * 是否需要计算同比
+     */
+    private Boolean needSyncCrc;
 }

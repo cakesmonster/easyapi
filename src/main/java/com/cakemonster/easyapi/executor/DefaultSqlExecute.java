@@ -1,15 +1,8 @@
-package com.cakemonster.easyapi.execute;
+package com.cakemonster.easyapi.executor;
 
 import com.alibaba.fastjson.JSON;
 import com.cakemonster.easyapi.parse.MybatisSqlParser;
-import com.github.pagehelper.parser.SqlParserUtil;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jsqlparser.parser.CCJSqlParserUtil;
-import net.sf.jsqlparser.statement.Statement;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectItem;
-import net.sf.jsqlparser.statement.select.SelectItemVisitorAdapter;
 import org.apache.ibatis.binding.BindingException;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.ParameterMapping;
@@ -23,8 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * AbstractDataSourceService
@@ -76,29 +67,6 @@ public class DefaultSqlExecute {
             }
             return rowMap;
         });
-    }
-
-    private List<String> parseAliases(String sql) {
-        Statement stmt = null;
-        try {
-            stmt = SqlParserUtil.parse(sql);
-        } catch (Throwable e) {
-
-        }
-        Select selectStatement = (Select)stmt;
-        PlainSelect plainSelect = (PlainSelect)selectStatement.getSelectBody();
-        List<String> aliases = new ArrayList<>();
-        for (SelectItem selectItem : plainSelect.getSelectItems()) {
-            selectItem.accept(new SelectItemVisitorAdapter() {
-                @Override
-                public void visit(SelectItem item) {
-                    if (item.getAlias() != null) {
-                        aliases.add(item.getAlias().getName());
-                    }
-                }
-            });
-        }
-        return aliases;
     }
 
     //    private Map<String, String> parseAliases(String sql) {

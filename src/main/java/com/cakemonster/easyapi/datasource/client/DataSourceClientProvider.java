@@ -45,8 +45,14 @@ public class DataSourceClientProvider {
 
     @PostConstruct
     public void init() {
+        log.info("Initializing DataSourceClientProvider, factory size {}", dataSourceClientFactoryList.size());
         dataSourceClientFactoryList.forEach(
             factory -> DATA_SOURCE_CLIENT_FACTORY_MAP.put(factory.getDbType().getName(), factory));
+    }
+
+    public DataSourceClient getDataSourceClient(DbType dbType, String connectionParam) throws ExecutionException {
+        BaseConnectionParam baseConnectionParam = castConnectionParam(dbType, connectionParam);
+        return getDataSourceClient(dbType, baseConnectionParam);
     }
 
     public DataSourceClient getDataSourceClient(DbType dbType, ConnectionParam connectionParam)
@@ -62,6 +68,14 @@ public class DataSourceClientProvider {
             }
             return dataSourceChannel.create(baseConnectionParam, dbType);
         });
+    }
+
+    public BaseConnectionParam castConnectionParam(DbType dbType, String connectionParam) {
+        DataSourceClientFactory dataSourceClientFactory = DATA_SOURCE_CLIENT_FACTORY_MAP.get(dbType.getName());
+        if (null == dataSourceClientFactory) {
+            throw new RuntimeException(String.format("datasource factory '%s' is not found", dbType.getName()));
+        }
+        return dataSourceClientFactory.castConnectionParam(connectionParam);
     }
 
     private String getDatasourceUniqueId(ConnectionParam connectionParam, DbType dbType) {

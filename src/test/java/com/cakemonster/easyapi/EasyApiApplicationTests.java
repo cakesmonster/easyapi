@@ -1,7 +1,7 @@
 package com.cakemonster.easyapi;
 
 import com.alibaba.fastjson.JSON;
-import com.cakemonster.easyapi.execute.DefaultSqlExecute;
+import com.cakemonster.easyapi.executor.DefaultSqlExecute;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -18,7 +18,7 @@ import java.io.Serializable;
  * API信息表(ApiInfo)表实体类
  *
  * @author cakemonster
- * @date 2024-08-03 22:47:18
+ * @date 2024-08-04 14:29:41
  */
 @Data
 @SuppressWarnings("serial")
@@ -58,6 +58,11 @@ public class ApiInfoDO extends Model<ApiInfoDO> {
      * sql模版/dsl
      */
     private String dsl;
+
+    /**
+     * 是否允许分页
+     */
+    private Integer enablePaging;
 
     /**
      * api请求参数
@@ -168,6 +173,7 @@ public class ApiInfoDO extends Model<ApiInfoDO> {
         apiInfoDTO.setApiProtocol(ApiProtocolEnum.valueOf(apiInfoDO.getApiProtocol()));
         apiInfoDTO.setEnv(EnvEnum.valueOf(apiInfoDO.getEnv()));
         apiInfoDTO.setDsl(apiInfoDO.getDsl());
+        apiInfoDTO.setEnablePaging(apiInfoDO.getEnablePaging() == 0);
         apiInfoDTO.setDatasetId(apiInfoDO.getDatasetId());
         apiInfoDTO.setStatus(ApiInfoStatusEnum.ofValue(apiInfoDO.getStatus()));
         apiInfoDTO.setApiOwner(apiInfoDO.getApiOwner());

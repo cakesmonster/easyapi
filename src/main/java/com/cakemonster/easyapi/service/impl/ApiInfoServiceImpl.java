@@ -77,8 +77,7 @@ public class ApiInfoServiceImpl extends ServiceImpl<ApiInfoMapper, ApiInfoDO> im
     }
 
     @Override
-    public ApiInfoDTO getApiInfoDetail(String appName, String apiInfoId) {
-        checkApp(appName);
+    public ApiInfoDTO getApiInfoDetail(Long apiInfoId) {
         ApiInfoDO apiInfoDO = apiInfoMapper.selectById(apiInfoId);
         return ApiInfoDO.doToDto(apiInfoDO);
     }

@@ -13,5 +13,7 @@ public interface DataSourceClientFactory {
 
     DataSourceClient create(BaseConnectionParam baseConnectionParam, DbType dbType);
 
+    BaseConnectionParam castConnectionParam(String connectionParam);
+
     DbType getDbType();
 }

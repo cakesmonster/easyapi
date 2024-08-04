@@ -138,6 +138,7 @@ public class ApiInfoDTO {
         apiInfoDO.setApiProtocol(dto.getApiProtocol().name());
         apiInfoDO.setEnv(dto.getEnv().name());
         apiInfoDO.setDsl(dto.getDsl());
+        apiInfoDO.setEnablePaging(dto.getEnablePaging() ? 0 : 1);
         apiInfoDO.setDatasetId(dto.getDatasetId());
         apiInfoDO.setStatus(dto.getStatus().getCode());
         apiInfoDO.setApiOwner(dto.getApiOwner());
