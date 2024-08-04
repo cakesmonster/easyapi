@@ -2,6 +2,7 @@ package com.cakemonster.easyapi.service.impl;
 
 import com.cakemonster.easyapi.datasource.client.DataSourceClient;
 import com.cakemonster.easyapi.enumration.ApiRespParamClass;
+import com.cakemonster.easyapi.executor.DefaultSqlExecute;
 import com.cakemonster.easyapi.model.dto.ApiInfoDTO;
 import com.cakemonster.easyapi.model.dto.ApiRequestDTO;
 import com.cakemonster.easyapi.model.dto.ApiResponseDTO;
@@ -43,30 +44,27 @@ public class OneQueryServiceImpl implements OneQueryService {
         if (apiInfo == null) {
             throw new IllegalArgumentException("API with ID " + apiInfoId + " not found");
         }
+
+        // 验证必传参数
+        List<ApiRequestDTO> requestParams = apiInfo.getApiRequests();
+        for (ApiRequestDTO requestParam : requestParams) {
+            if (requestParam.getRequired() && !queryParamDTO.containsKey(requestParam.getParamName())) {
+                throw new RuntimeException("Missing required parameter: " + requestParam.getParamName());
+            }
+        }
+
         // TODO(hzq): 分页查询
         Boolean enablePaging = apiInfo.getEnablePaging();
-
-        List<ApiRequestDTO> apiRequests = apiInfo.getApiRequests();
         List<ApiResponseDTO> apiResponses = apiInfo.getApiResponses();
-
-        // 构建参数数组
-        Object[] queryParams = new Object[apiRequests.size()];
-        int index = 0;
-        for (ApiRequestDTO param : apiRequests) {
-            String paramName = param.getParamName();
-            if (param.getRequired() && !queryParamDTO.containsKey(paramName)) {
-                throw new IllegalArgumentException("Missing required parameter: " + paramName);
-            }
-            queryParams[index++] = queryParamDTO.get(paramName);
-        }
 
         // 执行SQL查询并处理结果集
         String dsl = apiInfo.getDsl();
         Long datasetId = apiInfo.getDatasetId();
         DataSourceClient dataSourceClient = dataSourceService.getDataSource(datasetId);
 
-        List<Map<String, Object>> firstQueryResult =
-            dataSourceClient.getJdbcTemplate().query(dsl, queryParams, new ApiResponseRowMapper(apiResponses));
+        // TODO(hzq): 替换自定义DSL，不一定用mybatis xml sql
+        DefaultSqlExecute defaultSqlExecute = new DefaultSqlExecute(dataSourceClient.getJdbcTemplate(), apiResponses);
+        List<Map<String, Object>> firstQueryResult = defaultSqlExecute.executeSql(dsl, queryParamDTO);
 
         // TODO(hzq): 同环比
         boolean needCalcCycleCrc = apiResponses.stream().anyMatch(ApiResponseDTO::getNeedCycleCrc);
@@ -75,45 +73,4 @@ public class OneQueryServiceImpl implements OneQueryService {
         return firstQueryResult;
     }
 
-
-
-    private static class ApiResponseRowMapper implements RowMapper<Map<String, Object>> {
-
-        private final List<ApiResponseDTO> responseParams;
-
-        public ApiResponseRowMapper(List<ApiResponseDTO> responseParams) {
-            this.responseParams = responseParams;
-        }
-
-        @Override
-        public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Map<String, Object> result = new HashMap<>();
-            for (ApiResponseDTO param : responseParams) {
-                String paramName = param.getParamName();
-                Object value = getValueByType(rs, paramName, param.getParamClass());
-                result.put(paramName, value);
-            }
-            return result;
-        }
-
-        private Object getValueByType(ResultSet rs, String paramName, ApiRespParamClass paramClass)
-            throws SQLException {
-            switch (paramClass) {
-                case STRING:
-                    return rs.getString(paramName);
-                case INT:
-                    return rs.getInt(paramName);
-                case LONG:
-                    return rs.getLong(paramName);
-                case BOOLEAN:
-                    return rs.getBoolean(paramName);
-                case FLOAT:
-                    return rs.getFloat(paramName);
-                case DOUBLE:
-                    return rs.getDouble(paramName);
-                default:
-                    return rs.getObject(paramName);
-            }
-        }
-    }
 }

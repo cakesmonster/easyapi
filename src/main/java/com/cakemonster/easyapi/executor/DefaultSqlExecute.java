@@ -1,6 +1,9 @@
 package com.cakemonster.easyapi.executor;
 
 import com.alibaba.fastjson.JSON;
+import com.cakemonster.easyapi.enumration.ApiRespParamClass;
+import com.cakemonster.easyapi.model.dto.ApiResponseDTO;
+import com.cakemonster.easyapi.model.dto.QueryParamDTO;
 import com.cakemonster.easyapi.parse.MybatisSqlParser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.BindingException;
@@ -11,7 +14,10 @@ import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +36,13 @@ public class DefaultSqlExecute {
 
     private final MybatisSqlParser parser = new MybatisSqlParser();
 
+    private final ApiResponseRowMapper rowMapper;
+
     private final JdbcTemplate jdbcTemplate;
 
-    public DefaultSqlExecute(JdbcTemplate jdbcTemplate) {
+    public DefaultSqlExecute(JdbcTemplate jdbcTemplate, List<ApiResponseDTO> responses) {
         this.jdbcTemplate = jdbcTemplate;
+        this.rowMapper = new ApiResponseRowMapper(responses);
     }
 
     public List<Map<String, Object>> executeSql(String xml, Map<String, Object> conditions) {
@@ -52,37 +61,8 @@ public class DefaultSqlExecute {
         log.info("parameters: {}", JSON.toJSONString(parameters));
 
         // 执行sql查询
-        return execute(boundSql.getSql(), parameters);
+        return jdbcTemplate.query(boundSql.getSql(), parameters.toArray(), rowMapper);
     }
-
-    private List<Map<String, Object>> execute(String sql, List<Object> params) {
-        return jdbcTemplate.query(sql, params.toArray(), (rs, rowNum) -> {
-            Map<String, Object> rowMap = new HashMap<>();
-            int columnCount = rs.getMetaData().getColumnCount();
-            for (int i = 1; i <= columnCount; i++) {
-                // TODO(hzq): H2好像直接通过meta获取别名会全部大写？还有别的数据库会这样么？
-                String columnLabel = rs.getMetaData().getColumnLabel(i);
-                Object columnValue = rs.getObject(i);
-                rowMap.put(columnLabel, columnValue);
-            }
-            return rowMap;
-        });
-    }
-
-    //    private Map<String, String> parseAliases(String sql) {
-    //        Map<String, String> aliasMap = new HashMap<>();
-    //        // 只考虑 SELECT 子句部分
-    //        String selectClause = sql.split("(?i)from")[0];
-    //        // 正则表达式匹配列名和别名
-    //        Pattern pattern = Pattern.compile("(?i)([^,\\s]+)(\\s+AS\\s+([\\w]+))?");
-    //        Matcher matcher = pattern.matcher(selectClause);
-    //        while (matcher.find()) {
-    //            String columnName = matcher.group(1).trim();
-    //            String alias = matcher.group(3) != null ? matcher.group(3).trim() : columnName;
-    //            aliasMap.put(columnName, alias);
-    //        }
-    //        return aliasMap;
-    //    }
 
     private List<Object> extractParameters(BoundSql boundSql, Map<String, Object> conditions) {
         List<Object> parameters = new ArrayList<>();
@@ -134,5 +114,45 @@ public class DefaultSqlExecute {
 
         log.info("params: {}", JSON.toJSONString(paramNames));
         return parameters;
+    }
+
+    private static class ApiResponseRowMapper implements RowMapper<Map<String, Object>> {
+
+        private final List<ApiResponseDTO> responseParams;
+
+        public ApiResponseRowMapper(List<ApiResponseDTO> responseParams) {
+            this.responseParams = responseParams;
+        }
+
+        @Override
+        public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Map<String, Object> result = new HashMap<>();
+            for (ApiResponseDTO param : responseParams) {
+                String paramName = param.getParamName();
+                Object value = getValueByType(rs, paramName, param.getParamClass());
+                result.put(paramName, value);
+            }
+            return result;
+        }
+
+        private Object getValueByType(ResultSet rs, String paramName, ApiRespParamClass paramClass)
+            throws SQLException {
+            switch (paramClass) {
+                case STRING:
+                    return rs.getString(paramName);
+                case INT:
+                    return rs.getInt(paramName);
+                case LONG:
+                    return rs.getLong(paramName);
+                case BOOLEAN:
+                    return rs.getBoolean(paramName);
+                case FLOAT:
+                    return rs.getFloat(paramName);
+                case DOUBLE:
+                    return rs.getDouble(paramName);
+                default:
+                    return rs.getObject(paramName);
+            }
+        }
     }
 }
