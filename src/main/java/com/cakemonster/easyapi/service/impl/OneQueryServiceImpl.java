@@ -1,8 +1,7 @@
 package com.cakemonster.easyapi.service.impl;
 
 import com.cakemonster.easyapi.datasource.client.DataSourceClient;
-import com.cakemonster.easyapi.enumration.ApiRespParamClass;
-import com.cakemonster.easyapi.executor.DefaultSqlExecute;
+import com.cakemonster.easyapi.executor.DefaultSqlExecutor;
 import com.cakemonster.easyapi.model.dto.ApiInfoDTO;
 import com.cakemonster.easyapi.model.dto.ApiRequestDTO;
 import com.cakemonster.easyapi.model.dto.ApiResponseDTO;
@@ -12,12 +11,8 @@ import com.cakemonster.easyapi.service.DataSourceService;
 import com.cakemonster.easyapi.service.OneQueryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,8 +58,8 @@ public class OneQueryServiceImpl implements OneQueryService {
         DataSourceClient dataSourceClient = dataSourceService.getDataSource(datasetId);
 
         // TODO(hzq): 替换自定义DSL，不一定用mybatis xml sql
-        DefaultSqlExecute defaultSqlExecute = new DefaultSqlExecute(dataSourceClient.getJdbcTemplate(), apiResponses);
-        List<Map<String, Object>> firstQueryResult = defaultSqlExecute.executeSql(dsl, queryParamDTO);
+        DefaultSqlExecutor defaultSqlExecutor = new DefaultSqlExecutor(dataSourceClient.getJdbcTemplate(), apiResponses);
+        List<Map<String, Object>> firstQueryResult = defaultSqlExecutor.executeSql(dsl, queryParamDTO);
 
         // TODO(hzq): 同环比
         boolean needCalcCycleCrc = apiResponses.stream().anyMatch(ApiResponseDTO::getNeedCycleCrc);

@@ -3,7 +3,6 @@ package com.cakemonster.easyapi.executor;
 import com.alibaba.fastjson.JSON;
 import com.cakemonster.easyapi.enumration.ApiRespParamClass;
 import com.cakemonster.easyapi.model.dto.ApiResponseDTO;
-import com.cakemonster.easyapi.model.dto.QueryParamDTO;
 import com.cakemonster.easyapi.parse.MybatisSqlParser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.binding.BindingException;
@@ -30,7 +29,7 @@ import java.util.Map;
  * @date 2024/7/27
  */
 @Slf4j
-public class DefaultSqlExecute {
+public class DefaultSqlExecutor {
 
     private static final Configuration CONFIGURATION = new Configuration();
 
@@ -40,7 +39,7 @@ public class DefaultSqlExecute {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public DefaultSqlExecute(JdbcTemplate jdbcTemplate, List<ApiResponseDTO> responses) {
+    public DefaultSqlExecutor(JdbcTemplate jdbcTemplate, List<ApiResponseDTO> responses) {
         this.jdbcTemplate = jdbcTemplate;
         this.rowMapper = new ApiResponseRowMapper(responses);
     }
