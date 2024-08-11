@@ -7,6 +7,7 @@ import com.cakemonster.easyapi.model.DatabaseColumn;
 import com.cakemonster.easyapi.model.DataSourceQueryParam;
 import com.cakemonster.easyapi.model.DataSourceQueryResult;
 import com.cakemonster.easyapi.model.dto.ApiResponseDTO;
+import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -24,6 +25,7 @@ import java.util.Map;
  * @author cakemonster
  * @date 2024/8/11
  */
+@Service
 public class JdbcDataSourceService implements DataSourceService {
 
     private final DataSourceManager dataSourceManager;
