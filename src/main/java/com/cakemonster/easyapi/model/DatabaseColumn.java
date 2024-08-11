@@ -21,4 +21,5 @@ public class DatabaseColumn {
 
     private Object value;
 
+
 }

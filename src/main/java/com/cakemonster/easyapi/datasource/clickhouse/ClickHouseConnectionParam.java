@@ -1,6 +1,7 @@
 package com.cakemonster.easyapi.datasource.clickhouse;
 
 import com.cakemonster.easyapi.datasource.param.BaseConnectionParam;
+import com.cakemonster.easyapi.enums.DbType;
 import lombok.Data;
 
 /**
@@ -11,4 +12,8 @@ import lombok.Data;
  */
 @Data
 public class ClickHouseConnectionParam extends BaseConnectionParam {
+    @Override
+    public DbType getDbType() {
+        return null;
+    }
 }

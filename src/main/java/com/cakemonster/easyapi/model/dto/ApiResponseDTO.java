@@ -32,10 +32,10 @@ public class ApiResponseDTO {
     /**
      * 是否需要计算环比
      */
-    private Boolean needCycleCrc;
+    private Boolean needCycleRatio;
 
     /**
      * 是否需要计算同比
      */
-    private Boolean needSyncCrc;
+    private Boolean needSyncRatio;
 }
