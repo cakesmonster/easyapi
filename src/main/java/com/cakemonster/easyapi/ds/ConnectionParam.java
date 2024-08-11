@@ -1,4 +1,6 @@
-package com.cakemonster.easyapi.datasource.param;
+package com.cakemonster.easyapi.ds;
+
+import com.cakemonster.easyapi.enums.DbType;
 
 /**
  * ConnectionParam
@@ -7,4 +9,6 @@ package com.cakemonster.easyapi.datasource.param;
  * @date 2024/8/3
  */
 public interface ConnectionParam {
+
+    DbType getDbType();
 }

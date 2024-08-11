@@ -1,6 +1,6 @@
 package com.cakemonster.easyapi.datasource.client;
 
-import com.cakemonster.easyapi.enumration.DbType;
+import com.cakemonster.easyapi.enums.DbType;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**

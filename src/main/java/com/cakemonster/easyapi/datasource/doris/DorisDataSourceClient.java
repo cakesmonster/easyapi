@@ -2,8 +2,7 @@ package com.cakemonster.easyapi.datasource.doris;
 
 import com.cakemonster.easyapi.datasource.client.AbstractJdbcDataSourceClient;
 import com.cakemonster.easyapi.datasource.param.BaseConnectionParam;
-import com.cakemonster.easyapi.enumration.DbType;
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.cakemonster.easyapi.enums.DbType;
 
 /**
  * DorisDataSourceClient

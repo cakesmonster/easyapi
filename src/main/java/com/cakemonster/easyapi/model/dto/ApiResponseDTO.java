@@ -1,6 +1,6 @@
 package com.cakemonster.easyapi.model.dto;
 
-import com.cakemonster.easyapi.enumration.ApiRespParamClass;
+import com.cakemonster.easyapi.enums.ApiRespParamClass;
 import lombok.Data;
 
 /**

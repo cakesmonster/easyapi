@@ -3,7 +3,7 @@ package com.cakemonster.easyapi.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cakemonster.easyapi.dao.ApiInfoMapper;
-import com.cakemonster.easyapi.enumration.*;
+import com.cakemonster.easyapi.enums.*;
 import com.cakemonster.easyapi.exception.BizException;
 import com.cakemonster.easyapi.model.dto.ApiInfoDTO;
 import com.cakemonster.easyapi.model.dto.ApiRequestDTO;

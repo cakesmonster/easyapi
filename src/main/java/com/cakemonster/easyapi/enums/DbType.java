@@ -1,4 +1,4 @@
-package com.cakemonster.easyapi.enumration;
+package com.cakemonster.easyapi.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,9 +13,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum DbType {
 
-    CLICKHOUSE(0, "clickhouse", "com.clickhouse.jdbc.ClickHouseDriver"),
-    DORIS(1, "doris", "com.mysql.cj.jdbc.Driver"),
-    MYSQL(2, "mysql", "com.mysql.cj.jdbc.Driver");
+    CLICKHOUSE(0, "clickhouse", "com.clickhouse.jdbc.ClickHouseDriver", true),
+    DORIS(1, "doris", "com.mysql.cj.jdbc.Driver", true),
+    MYSQL(2, "mysql", "com.mysql.cj.jdbc.Driver", true);
 
     private final Integer code;
 
@@ -23,9 +23,20 @@ public enum DbType {
 
     private final String driverClass;
 
+    private final Boolean jdbc;
+
     public static DbType of(Integer code) {
         for (DbType dbType : DbType.values()) {
             if (dbType.getCode().equals(code)) {
+                return dbType;
+            }
+        }
+        return null;
+    }
+
+    public static DbType of(String name) {
+        for (DbType dbType : DbType.values()) {
+            if (dbType.getName().equals(name)) {
                 return dbType;
             }
         }

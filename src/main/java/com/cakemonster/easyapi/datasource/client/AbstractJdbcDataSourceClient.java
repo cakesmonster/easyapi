@@ -1,7 +1,7 @@
 package com.cakemonster.easyapi.datasource.client;
 
 import com.cakemonster.easyapi.datasource.param.BaseConnectionParam;
-import com.cakemonster.easyapi.enumration.DbType;
+import com.cakemonster.easyapi.enums.DbType;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.zaxxer.hikari.HikariDataSource;

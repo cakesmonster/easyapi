@@ -1,5 +1,6 @@
 package com.cakemonster.easyapi.datasource.param;
 
+import com.cakemonster.easyapi.ds.ConnectionParam;
 import lombok.Data;
 
 import java.util.HashMap;

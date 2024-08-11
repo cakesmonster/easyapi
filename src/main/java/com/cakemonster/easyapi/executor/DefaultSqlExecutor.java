@@ -1,7 +1,7 @@
 package com.cakemonster.easyapi.executor;
 
 import com.alibaba.fastjson.JSON;
-import com.cakemonster.easyapi.enumration.ApiRespParamClass;
+import com.cakemonster.easyapi.enums.ApiRespParamClass;
 import com.cakemonster.easyapi.model.dto.ApiResponseDTO;
 import com.cakemonster.easyapi.parse.MybatisSqlParser;
 import lombok.extern.slf4j.Slf4j;

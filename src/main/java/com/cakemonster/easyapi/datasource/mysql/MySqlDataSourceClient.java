@@ -2,7 +2,7 @@ package com.cakemonster.easyapi.datasource.mysql;
 
 import com.cakemonster.easyapi.datasource.client.AbstractJdbcDataSourceClient;
 import com.cakemonster.easyapi.datasource.param.BaseConnectionParam;
-import com.cakemonster.easyapi.enumration.DbType;
+import com.cakemonster.easyapi.enums.DbType;
 
 /**
  * MySqlDataSourceClient

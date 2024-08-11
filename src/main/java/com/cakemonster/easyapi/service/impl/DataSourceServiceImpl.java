@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cakemonster.easyapi.dao.DatasourceMapper;
 import com.cakemonster.easyapi.datasource.client.DataSourceClient;
 import com.cakemonster.easyapi.datasource.client.DataSourceClientProvider;
-import com.cakemonster.easyapi.enumration.DbType;
+import com.cakemonster.easyapi.enums.DbType;
 import com.cakemonster.easyapi.model.dto.DataSourceDO;
 import com.cakemonster.easyapi.service.DataSourceService;
 import org.springframework.beans.factory.annotation.Autowired;

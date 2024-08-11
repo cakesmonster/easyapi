@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.cakemonster.easyapi.datasource.client.DataSourceClient;
 import com.cakemonster.easyapi.datasource.client.DataSourceClientFactory;
 import com.cakemonster.easyapi.datasource.param.BaseConnectionParam;
-import com.cakemonster.easyapi.enumration.DbType;
+import com.cakemonster.easyapi.enums.DbType;
 import org.springframework.stereotype.Service;
 
 /**

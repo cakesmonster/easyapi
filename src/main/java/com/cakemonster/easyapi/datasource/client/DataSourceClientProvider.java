@@ -1,8 +1,8 @@
 package com.cakemonster.easyapi.datasource.client;
 
 import com.cakemonster.easyapi.datasource.param.BaseConnectionParam;
-import com.cakemonster.easyapi.datasource.param.ConnectionParam;
-import com.cakemonster.easyapi.enumration.DbType;
+import com.cakemonster.easyapi.ds.ConnectionParam;
+import com.cakemonster.easyapi.enums.DbType;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalListener;
@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;

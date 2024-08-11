@@ -2,10 +2,10 @@ package com.cakemonster.easyapi.model.entity;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.cakemonster.easyapi.enumration.ApiInfoStatusEnum;
-import com.cakemonster.easyapi.enumration.ApiMethodEnum;
-import com.cakemonster.easyapi.enumration.ApiProtocolEnum;
-import com.cakemonster.easyapi.enumration.EnvEnum;
+import com.cakemonster.easyapi.enums.ApiInfoStatusEnum;
+import com.cakemonster.easyapi.enums.ApiMethodEnum;
+import com.cakemonster.easyapi.enums.ApiProtocolEnum;
+import com.cakemonster.easyapi.enums.EnvEnum;
 import com.cakemonster.easyapi.model.dto.ApiInfoDTO;
 import com.cakemonster.easyapi.model.dto.ApiRequestDTO;
 import com.cakemonster.easyapi.model.dto.ApiResponseDTO;

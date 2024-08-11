@@ -1,4 +1,4 @@
-package com.cakemonster.easyapi.enumration;
+package com.cakemonster.easyapi.enums;
 
 /**
  * ApiRespParamClass

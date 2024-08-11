@@ -1,7 +1,7 @@
 package com.cakemonster.easyapi.dsl.model;
 
-import com.cakemonster.easyapi.enumration.ApiParamClassEnum;
-import com.cakemonster.easyapi.enumration.ApiParamType;
+import com.cakemonster.easyapi.enums.ApiParamClassEnum;
+import com.cakemonster.easyapi.enums.ApiParamType;
 import lombok.Data;
 
 /**

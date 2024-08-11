@@ -1,7 +1,6 @@
-package com.cakemonster.easyapi.enumration;
+package com.cakemonster.easyapi.enums;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 
 /**
